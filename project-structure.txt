@@ -1,0 +1,23 @@
+expense-tracker/
+│
+├── app.py                  # Flask app entry point — defines all routes
+│
+├── database/
+│   ├── __init__.py         # Makes database/ a Python package
+│   └── db.py               # SQLite helpers (get_db, init_db, seed_db) — not yet implemented
+│
+├── templates/
+│   ├── base.html           # Base layout — other templates extend this
+│   ├── landing.html        # Home/landing page
+│   ├── login.html          # Login form
+│   └── register.html       # Registration form
+│
+├── static/
+│   ├── css/
+│   │   └── style.css       # App styles
+│   └── js/
+│       └── main.js         # Frontend JavaScript
+│
+├── requirements.txt        # Python dependencies
+├── .gitignore              # Git ignore rules
+└── venv/                   # Virtual environment (not committed)
