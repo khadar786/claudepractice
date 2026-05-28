@@ -1,0 +1,250 @@
+/* ------------------------------------------------------------------ */
+/* Profile page layout                                                 */
+/* ------------------------------------------------------------------ */
+
+.profile-page {
+    max-width: var(--max-width);
+    margin: 2rem auto;
+    padding: 0 2rem 4rem;
+    display: grid;
+    gap: 2rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* User info card                                                      */
+/* ------------------------------------------------------------------ */
+
+.profile-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--paper);
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.profile-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--ink);
+    line-height: 1.2;
+}
+
+.profile-email {
+    color: var(--ink-muted);
+    font-size: 0.9375rem;
+}
+
+.profile-meta {
+    color: var(--ink-faint);
+    font-size: 0.875rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Summary stats row                                                   */
+/* ------------------------------------------------------------------ */
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.stat-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.stat-value {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--accent);
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Transaction history                                                 */
+/* ------------------------------------------------------------------ */
+
+.transactions-section {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.section-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    color: var(--ink);
+}
+
+.transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transaction-table th {
+    background: var(--paper-warm);
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.transaction-table td {
+    padding: 0.875rem 1.5rem;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+}
+
+.transaction-table tr:last-child td {
+    border-bottom: none;
+}
+
+.transaction-table .amount {
+    font-weight: 600;
+    color: var(--ink);
+    text-align: right;
+}
+
+/* ------------------------------------------------------------------ */
+/* Category badges                                                     */
+/* ------------------------------------------------------------------ */
+
+.badge {
+    display: inline-block;
+    padding: 0.2em 0.65em;
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+.badge-food          { background: var(--accent-2-light); color: var(--accent-2); }
+.badge-bills         { background: var(--danger-light);   color: var(--danger); }
+.badge-transport     { background: var(--accent-light);   color: var(--accent); }
+.badge-health        { background: var(--info-light);     color: var(--info); }
+.badge-entertainment { background: var(--paper-warm);     color: var(--ink-soft); }
+.badge-other         { background: var(--border-soft);    color: var(--ink-muted); }
+
+/* ------------------------------------------------------------------ */
+/* Category breakdown                                                  */
+/* ------------------------------------------------------------------ */
+
+.category-breakdown {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.category-list {
+    padding: 0.5rem 0;
+}
+
+.category-row {
+    display: grid;
+    grid-template-columns: 7rem 1fr 5rem;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1.5rem;
+}
+
+.category-row + .category-row {
+    border-top: 1px solid var(--border-soft);
+}
+
+.category-name {
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+}
+
+.category-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.category-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    width: var(--pct);
+}
+
+.category-amount {
+    font-size: 0.9375rem;
+    color: var(--ink-muted);
+    text-align: right;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive                                                          */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 600px) {
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .category-row {
+        grid-template-columns: 1fr 3rem;
+        grid-template-rows: auto auto;
+    }
+
+    .category-bar {
+        grid-column: 1 / -1;
+    }
+
+    .transaction-table th:nth-child(1),
+    .transaction-table td:nth-child(1) {
+        display: none;
+    }
+}

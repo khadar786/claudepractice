@@ -121,7 +121,45 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    return "Profile page — coming in Step 4"
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    user = {
+        "name": "Alex Johnson",
+        "email": "alex@example.com",
+        "initials": "AJ",
+        "member_since": "January 2025",
+    }
+
+    stats = {
+        "total_spent": "₹12,480",
+        "transaction_count": 24,
+        "top_category": "Food",
+    }
+
+    transactions = [
+        {"date": "25 May 2026", "description": "Swiggy dinner",    "category": "Food",          "amount": "₹650"},
+        {"date": "22 May 2026", "description": "Electricity bill", "category": "Bills",         "amount": "₹1,240"},
+        {"date": "20 May 2026", "description": "Metro pass",       "category": "Transport",     "amount": "₹300"},
+        {"date": "18 May 2026", "description": "Pharmacy",         "category": "Health",        "amount": "₹480"},
+        {"date": "15 May 2026", "description": "Movie tickets",    "category": "Entertainment", "amount": "₹600"},
+    ]
+
+    categories = [
+        {"name": "Food",          "amount": "₹4,200", "percent": 34},
+        {"name": "Bills",         "amount": "₹2,800", "percent": 22},
+        {"name": "Transport",     "amount": "₹1,900", "percent": 15},
+        {"name": "Health",        "amount": "₹1,580", "percent": 13},
+        {"name": "Entertainment", "amount": "₹1,200", "percent": 10},
+    ]
+
+    return render_template(
+        "profile.html",
+        user=user,
+        stats=stats,
+        transactions=transactions,
+        categories=categories,
+    )
 
 
 @app.route("/expenses/add")
