@@ -141,27 +141,15 @@ def profile():
     # ---- END SECTION: USER ----------------------------------------- #
 
     # ---- SECTION: STATS (Subagent 2 — do not edit above/below) ----- #
-    stats = {"total_spent": "₹12,480", "transaction_count": 24, "top_category": "Food"}
+    stats = get_summary_stats(user_id)
     # ---- END SECTION: STATS ---------------------------------------- #
 
     # ---- SECTION: TRANSACTIONS (Subagent 1 — do not edit above/below) #
-    transactions = [
-        {"date": "25 May 2026", "description": "Swiggy dinner",    "category": "Food",          "amount": "₹650"},
-        {"date": "22 May 2026", "description": "Electricity bill", "category": "Bills",         "amount": "₹1,240"},
-        {"date": "20 May 2026", "description": "Metro pass",       "category": "Transport",     "amount": "₹300"},
-        {"date": "18 May 2026", "description": "Pharmacy",         "category": "Health",        "amount": "₹480"},
-        {"date": "15 May 2026", "description": "Movie tickets",    "category": "Entertainment", "amount": "₹600"},
-    ]
+    transactions = get_recent_transactions(user_id)
     # ---- END SECTION: TRANSACTIONS ---------------------------------- #
 
     # ---- SECTION: CATEGORIES (Subagent 3 — do not edit above/below) - #
-    categories = [
-        {"name": "Food",          "amount": "₹4,200", "percent": 34},
-        {"name": "Bills",         "amount": "₹2,800", "percent": 22},
-        {"name": "Transport",     "amount": "₹1,900", "percent": 15},
-        {"name": "Health",        "amount": "₹1,580", "percent": 13},
-        {"name": "Entertainment", "amount": "₹1,200", "percent": 10},
-    ]
+    categories = get_category_breakdown(user_id)
     # ---- END SECTION: CATEGORIES ------------------------------------ #
 
     return render_template(

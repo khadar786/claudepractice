@@ -64,48 +64,52 @@ def _build_in_memory_db():
     return conn, uid
 
 
+def _make_no_close(conn):
+    """Wrap a connection so close() is a no-op, preserving the in-memory DB."""
+    class _NoClose:
+        def execute(self, *a, **kw):
+            return conn.execute(*a, **kw)
+
+        def executemany(self, *a, **kw):
+            return conn.executemany(*a, **kw)
+
+        def commit(self):
+            return conn.commit()
+
+        def close(self):
+            pass
+
+        def __getattr__(self, n):
+            return getattr(conn, n)
+
+    return _NoClose()
+
+
 @pytest.fixture
-def in_memory_conn():
+def in_memory_conn(monkeypatch):
+    """In-memory DB with get_db patched — safe for unit tests."""
     conn, uid = _build_in_memory_db()
+    monkeypatch.setattr(db_module, "get_db", lambda: _make_no_close(conn))
+    monkeypatch.setattr(queries_module, "get_db", lambda: _make_no_close(conn))
     yield conn, uid
     conn.close()
 
 
+# Named flask_app (not 'app') to avoid conflict with pytest-flask's autouse
+# fixture which expects the 'app' fixture to be a bare Flask instance.
 @pytest.fixture
-def app(monkeypatch):
+def flask_app(monkeypatch):
     conn, seed_uid = _build_in_memory_db()
-
-    class _NoClose:
-        def __init__(self, c):
-            self._c = c
-
-        def execute(self, *a, **kw):
-            return self._c.execute(*a, **kw)
-
-        def executemany(self, *a, **kw):
-            return self._c.executemany(*a, **kw)
-
-        def commit(self):
-            return self._c.commit()
-
-        def close(self):
-            pass  # prevent tests from closing the shared in-memory connection
-
-        def __getattr__(self, n):
-            return getattr(self._c, n)
-
-    monkeypatch.setattr(db_module, "get_db", lambda: _NoClose(conn))
-    monkeypatch.setattr(queries_module, "get_db", lambda: _NoClose(conn))
-
+    monkeypatch.setattr(db_module, "get_db", lambda: _make_no_close(conn))
+    monkeypatch.setattr(queries_module, "get_db", lambda: _make_no_close(conn))
     flask_app_module.app.config.update(TESTING=True, SECRET_KEY="test-secret")
-
     yield flask_app_module.app, seed_uid
     conn.close()
 
 
 @pytest.fixture
-def client(app):
-    a, uid = app
+def client(flask_app):
+    a, uid = flask_app
     return a.test_client(), uid
 
 
