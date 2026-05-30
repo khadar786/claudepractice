@@ -113,6 +113,9 @@
     font-family: var(--font-display);
     font-size: 1.125rem;
     color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
 .transaction-table {
@@ -218,6 +221,30 @@
     font-size: 0.9375rem;
     color: var(--ink-muted);
     text-align: right;
+}
+
+/* ------------------------------------------------------------------ */
+/* Inline-style removal                                                */
+/* ------------------------------------------------------------------ */
+
+.th-right { text-align: right; }
+
+/* ------------------------------------------------------------------ */
+/* Lucide icon sizing                                                  */
+/* ------------------------------------------------------------------ */
+
+.stat-icon    { width: 20px; height: 20px; color: var(--ink-muted); margin-bottom: 0.25rem; }
+.section-icon { width: 16px; height: 16px; color: var(--ink-muted); }
+.meta-icon    { width: 13px; height: 13px; color: var(--ink-faint); vertical-align: middle; margin-right: 0.2rem; }
+
+/* ------------------------------------------------------------------ */
+/* Tabular figures on all numeric output                               */
+/* ------------------------------------------------------------------ */
+
+.stat-value,
+.transaction-table .amount,
+.category-amount {
+    font-variant-numeric: tabular-nums;
 }
 
 /* ------------------------------------------------------------------ */

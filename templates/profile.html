@@ -16,21 +16,27 @@
         <div class="profile-info">
             <h1 class="profile-name">{{ user.name }}</h1>
             <p class="profile-email">{{ user.email }}</p>
-            <p class="profile-meta">Member since {{ user.member_since }}</p>
+            <p class="profile-meta">
+                <i data-lucide="calendar" class="meta-icon"></i>
+                Member since {{ user.member_since }}
+            </p>
         </div>
     </div>
 
     <!-- Summary stats -->
     <div class="stats-row">
         <div class="stat-card">
+            <i data-lucide="indian-rupee" class="stat-icon"></i>
             <span class="stat-value">{{ stats.total_spent }}</span>
             <span class="stat-label">Total spent</span>
         </div>
         <div class="stat-card">
+            <i data-lucide="receipt" class="stat-icon"></i>
             <span class="stat-value">{{ stats.transaction_count }}</span>
             <span class="stat-label">Transactions</span>
         </div>
         <div class="stat-card">
+            <i data-lucide="tag" class="stat-icon"></i>
             <span class="stat-value">{{ stats.top_category }}</span>
             <span class="stat-label">Top category</span>
         </div>
@@ -39,7 +45,10 @@
     <!-- Transaction history -->
     <div class="transactions-section">
         <div class="section-header">
-            <h2 class="section-title">Recent transactions</h2>
+            <h2 class="section-title">
+                <i data-lucide="clock" class="section-icon"></i>
+                Recent transactions
+            </h2>
         </div>
         <table class="transaction-table">
             <thead>
@@ -47,7 +56,7 @@
                     <th>Date</th>
                     <th>Description</th>
                     <th>Category</th>
-                    <th style="text-align: right">Amount</th>
+                    <th class="th-right">Amount</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,7 +77,10 @@
     <!-- Category breakdown -->
     <div class="category-breakdown">
         <div class="section-header">
-            <h2 class="section-title">Spending by category</h2>
+            <h2 class="section-title">
+                <i data-lucide="pie-chart" class="section-icon"></i>
+                Spending by category
+            </h2>
         </div>
         <div class="category-list">
             {% for c in categories %}
