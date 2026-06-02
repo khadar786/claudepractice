@@ -50,6 +50,22 @@
                 Recent transactions
             </h2>
         </div>
+        <div class="filter-bar">
+            <div class="filter-periods">
+                {% for key, label in [('last_7','Last 7 days'),('last_30','Last 30 days'),('this_month','This month'),('last_month','Last month'),('all','All time')] %}
+                <a href="{{ url_for('profile', period=key) }}"
+                   class="filter-btn{% if active_period == key %} active{% endif %}">{{ label }}</a>
+                {% endfor %}
+            </div>
+            <form class="filter-custom" method="get" action="{{ url_for('profile') }}">
+                <input type="date" name="start" value="{{ filter_start }}"
+                       class="filter-input{% if active_period == 'custom' %} active{% endif %}">
+                <span class="filter-sep">→</span>
+                <input type="date" name="end" value="{{ filter_end }}"
+                       class="filter-input{% if active_period == 'custom' %} active{% endif %}">
+                <button type="submit" class="filter-btn">Apply</button>
+            </form>
+        </div>
         <table class="transaction-table">
             <thead>
                 <tr>

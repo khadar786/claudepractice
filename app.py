@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date, timedelta
 
 from flask import (
     Flask,
@@ -13,6 +14,43 @@ from flask import (
 from werkzeug.security import check_password_hash
 
 from database.db import create_user, get_user_by_email, init_db, seed_db
+from database.queries import (
+    get_category_breakdown,
+    get_recent_transactions,
+    get_summary_stats,
+    get_user_by_id,
+)
+
+def _resolve_date_range(period, start, end):
+    """Return (start_str, end_str, active_period) from URL query params."""
+    today = date.today()
+    today_str = today.isoformat()
+
+    # Custom range takes precedence if both params are valid and start <= end
+    if start and end:
+        try:
+            s = date.fromisoformat(start)
+            e = date.fromisoformat(end)
+            if s <= e:
+                return start, end, "custom"
+        except ValueError:
+            pass
+
+    # Named period
+    if period == "last_7":
+        return (today - timedelta(days=6)).isoformat(), today_str, "last_7"
+    if period == "last_30":
+        return (today - timedelta(days=29)).isoformat(), today_str, "last_30"
+    if period == "this_month":
+        return today.replace(day=1).isoformat(), today_str, "this_month"
+    if period == "last_month":
+        first_this = today.replace(day=1)
+        last_prev = first_this - timedelta(days=1)
+        first_prev = last_prev.replace(day=1)
+        return first_prev.isoformat(), last_prev.isoformat(), "last_month"
+
+    return None, None, "all"
+
 
 app = Flask(__name__)
 # Dev placeholder — replace with env-var lookup before any non-local deployment.
@@ -124,34 +162,32 @@ def profile():
     if not session.get("user_id"):
         return redirect(url_for("login"))
 
-    user = {
-        "name": "Alex Johnson",
-        "email": "alex@example.com",
-        "initials": "AJ",
-        "member_since": "January 2025",
-    }
+    user_id = session["user_id"]
 
-    stats = {
-        "total_spent": "₹12,480",
-        "transaction_count": 24,
-        "top_category": "Food",
-    }
+    # ---- SECTION: USER (main agent) -------------------------------- #
+    user = get_user_by_id(user_id)
+    if user is None:
+        session.pop("user_id", None)
+        flash("Session expired. Please sign in again.", "error")
+        return redirect(url_for("login"))
+    # ---- END SECTION: USER ----------------------------------------- #
 
-    transactions = [
-        {"date": "25 May 2026", "description": "Swiggy dinner",    "category": "Food",          "amount": "₹650"},
-        {"date": "22 May 2026", "description": "Electricity bill", "category": "Bills",         "amount": "₹1,240"},
-        {"date": "20 May 2026", "description": "Metro pass",       "category": "Transport",     "amount": "₹300"},
-        {"date": "18 May 2026", "description": "Pharmacy",         "category": "Health",        "amount": "₹480"},
-        {"date": "15 May 2026", "description": "Movie tickets",    "category": "Entertainment", "amount": "₹600"},
-    ]
+    period = request.args.get("period", "")
+    start  = request.args.get("start", "")
+    end    = request.args.get("end", "")
+    start_date, end_date, active_period = _resolve_date_range(period, start, end)
 
-    categories = [
-        {"name": "Food",          "amount": "₹4,200", "percent": 34},
-        {"name": "Bills",         "amount": "₹2,800", "percent": 22},
-        {"name": "Transport",     "amount": "₹1,900", "percent": 15},
-        {"name": "Health",        "amount": "₹1,580", "percent": 13},
-        {"name": "Entertainment", "amount": "₹1,200", "percent": 10},
-    ]
+    # ---- SECTION: STATS (Subagent 2 — do not edit above/below) ----- #
+    stats = get_summary_stats(user_id, start_date, end_date)
+    # ---- END SECTION: STATS ---------------------------------------- #
+
+    # ---- SECTION: TRANSACTIONS (Subagent 1 — do not edit above/below) #
+    transactions = get_recent_transactions(user_id, start_date=start_date, end_date=end_date)
+    # ---- END SECTION: TRANSACTIONS ---------------------------------- #
+
+    # ---- SECTION: CATEGORIES (Subagent 3 — do not edit above/below) - #
+    categories = get_category_breakdown(user_id, start_date, end_date)
+    # ---- END SECTION: CATEGORIES ------------------------------------ #
 
     return render_template(
         "profile.html",
@@ -159,6 +195,9 @@ def profile():
         stats=stats,
         transactions=transactions,
         categories=categories,
+        active_period=active_period,
+        filter_start=start_date or "",
+        filter_end=end_date or "",
     )
 
 
