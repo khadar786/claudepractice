@@ -238,6 +238,77 @@
 .meta-icon    { width: 13px; height: 13px; color: var(--ink-faint); vertical-align: middle; margin-right: 0.2rem; }
 
 /* ------------------------------------------------------------------ */
+/* Date filter bar                                                     */
+/* ------------------------------------------------------------------ */
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--paper);
+}
+
+.filter-periods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.filter-btn {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.8125rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--paper-card);
+    color: var(--ink-soft);
+    text-decoration: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.filter-btn:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+}
+
+.filter-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+}
+
+.filter-custom {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+}
+
+.filter-sep {
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+}
+
+.filter-input {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8125rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    color: var(--ink-soft);
+    background: var(--paper-card);
+}
+
+.filter-input.active {
+    border-color: var(--ink);
+    color: var(--ink);
+}
+
+/* ------------------------------------------------------------------ */
 /* Tabular figures on all numeric output                               */
 /* ------------------------------------------------------------------ */
 
